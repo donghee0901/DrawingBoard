@@ -1,0 +1,15 @@
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\bin\Debug\DrawingBoard.exe.config
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\bin\Debug\DrawingBoard.exe
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\bin\Debug\DrawingBoard.pdb
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\DrawingBoard.csprojAssemblyReference.cache
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\MainWindow.g.cs
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\App.g.cs
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\DrawingBoard_MarkupCompile.cache
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\DrawingBoard_MarkupCompile.lref
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\MainWindow.baml
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\DrawingBoard.g.resources
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\DrawingBoard.Properties.Resources.resources
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\DrawingBoard.csproj.GenerateResource.cache
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\DrawingBoard.csproj.CoreCompileInputs.cache
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\DrawingBoard.exe
+C:\Users\user\source\repos\DrawingBoard\DrawingBoard\obj\Debug\DrawingBoard.pdb
