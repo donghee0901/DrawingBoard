@@ -98,9 +98,6 @@
     <Resource Include="image\RectangleButton.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="image\Bitmap1.bmp" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="image\LineButton.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

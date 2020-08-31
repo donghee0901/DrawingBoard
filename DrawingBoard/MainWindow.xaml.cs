@@ -21,7 +21,7 @@ namespace DrawingBoard
     public partial class MainWindow : Window
     {
         Point mousePoint1, mousePoint2;
-        int shape = 2;
+        int shape = 1;
         public MainWindow()
         {
             InitializeComponent();
@@ -78,6 +78,16 @@ namespace DrawingBoard
             PositionY2.Text = mousePoint2.Y.ToString();
             MainCanvas.Children.Add(DrawShape(mousePoint1.X, mousePoint1.Y, mousePoint2.X, mousePoint2.Y));
         }
+
+        private void LineButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            shape = 1;
+        }
+        private void RectangleButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            shape = 2;
+        }
+
         public Point GetMousePosition()
         {
             return Mouse.GetPosition(MainCanvas);
