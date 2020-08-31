@@ -23,8 +23,11 @@ namespace DrawingBoard
         public MainWindow()
         {
             InitializeComponent();
-            MainCanvas.Children.Add(DrawLine(0, 0, 100, 100));
-            MainCanvas.Children.Add(DrawRectangle(200, 100, 300, 300));
+            Rectangle background = new Rectangle();
+            background.Width = 800;
+            background.Height = 450;
+            background.Fill = Brushes.White;
+            MainCanvas.Children.Add(background);
         }
         public Rectangle DrawRectangle(int x1, int y1, int x2, int y2)
         {
@@ -46,6 +49,24 @@ namespace DrawingBoard
             drawLine.Stroke = Brushes.Red;
             drawLine.StrokeThickness = 2;
             return drawLine;
+        }
+
+        private void Button_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var mousePoint = GetMousePosition();
+            PositionX1.Text = mousePoint.X.ToString();
+            PositionY1.Text = mousePoint.Y.ToString();
+        }
+
+        private void Button_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            var mousePoint = GetMousePosition();
+            PositionX2.Text = mousePoint.X.ToString();
+            PositionY2.Text = mousePoint.Y.ToString();
+        }
+        public Point GetMousePosition()
+        {
+            return Mouse.GetPosition(MainCanvas);
         }
     }
 }

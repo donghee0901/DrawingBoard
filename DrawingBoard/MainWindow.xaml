@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Canvas Name="MainCanvas"/>
+        <TextBox Name="PositionX1" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="X1" VerticalAlignment="Top" Margin="629,122,0,0" Width="60"/>
+        <TextBox Name="PositionY1" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Y1" VerticalAlignment="Top" Margin="689,122,0,0" Width="60"/>
+        <TextBox Name="PositionX2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="X2" VerticalAlignment="Top" Margin="629,145,0,0" Width="60"/>
+        <TextBox Name="PositionY2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Y2" VerticalAlignment="Top" Margin="689,145,0,0" Width="60"/>
+        <Canvas Name="MainCanvas" Panel.ZIndex="-1" MouseDown="Button_MouseDown" MouseUp="Button_MouseUp"/>
     </Grid>
 </Window>
