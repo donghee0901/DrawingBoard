@@ -20,6 +20,7 @@ namespace DrawingBoard
     /// </summary>
     public partial class MainWindow : Window
     {
+        Point mousePoint1, mousePoint2;
         public MainWindow()
         {
             InitializeComponent();
@@ -39,7 +40,7 @@ namespace DrawingBoard
             Canvas.SetTop(drawRectangle, y1);
             return drawRectangle;
         }
-        public Line DrawLine(int x1,int y1,int x2,int y2)
+        public Line DrawLine(double x1, double y1, double x2, double y2)
         {
             Line drawLine = new Line();
             drawLine.X1 = x1;
@@ -50,19 +51,19 @@ namespace DrawingBoard
             drawLine.StrokeThickness = 2;
             return drawLine;
         }
-
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            var mousePoint = GetMousePosition();
-            PositionX1.Text = mousePoint.X.ToString();
-            PositionY1.Text = mousePoint.Y.ToString();
+            mousePoint1 = GetMousePosition();
+            PositionX1.Text = mousePoint1.X.ToString();
+            PositionY1.Text = mousePoint1.Y.ToString();
         }
 
         private void Button_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            var mousePoint = GetMousePosition();
-            PositionX2.Text = mousePoint.X.ToString();
-            PositionY2.Text = mousePoint.Y.ToString();
+            mousePoint2 = GetMousePosition();
+            PositionX2.Text = mousePoint2.X.ToString();
+            PositionY2.Text = mousePoint2.Y.ToString();
+            MainCanvas.Children.Add(DrawLine(mousePoint1.X, mousePoint1.Y, mousePoint2.X, mousePoint2.Y));
         }
         public Point GetMousePosition()
         {
