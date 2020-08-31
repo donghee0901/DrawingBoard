@@ -21,6 +21,7 @@ namespace DrawingBoard
     public partial class MainWindow : Window
     {
         Point mousePoint1, mousePoint2;
+        int shape = 2;
         public MainWindow()
         {
             InitializeComponent();
@@ -30,14 +31,26 @@ namespace DrawingBoard
             background.Fill = Brushes.White;
             MainCanvas.Children.Add(background);
         }
-        public Rectangle DrawRectangle(int x1, int y1, int x2, int y2)
+        public Shape DrawShape(double x1, double y1, double x2, double y2)
+        {
+            switch (shape)
+            {
+                case 1:
+                    return DrawLine(x1, y1, x2, y2);
+                case 2:
+                    return DrawRectangle(x1, y1, x2, y2);
+                default:
+                    return DrawLine(0, 0, 0, 0);
+            }
+        }
+        public Rectangle DrawRectangle(double x1, double y1, double x2, double y2)
         {
             Rectangle drawRectangle = new Rectangle();
-            drawRectangle.Width = x2 - x1;
-            drawRectangle.Height = y2 - y1;
+            drawRectangle.Width = (x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2);
+            drawRectangle.Height = (y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2);
             drawRectangle.Fill = Brushes.Black;
-            Canvas.SetLeft(drawRectangle, x1);
-            Canvas.SetTop(drawRectangle, y1);
+            Canvas.SetLeft(drawRectangle, (x1 < x2 ? x1 : x2));
+            Canvas.SetTop(drawRectangle, (y1 < y2 ? y1 : y2));
             return drawRectangle;
         }
         public Line DrawLine(double x1, double y1, double x2, double y2)
@@ -63,7 +76,7 @@ namespace DrawingBoard
             mousePoint2 = GetMousePosition();
             PositionX2.Text = mousePoint2.X.ToString();
             PositionY2.Text = mousePoint2.Y.ToString();
-            MainCanvas.Children.Add(DrawLine(mousePoint1.X, mousePoint1.Y, mousePoint2.X, mousePoint2.Y));
+            MainCanvas.Children.Add(DrawShape(mousePoint1.X, mousePoint1.Y, mousePoint2.X, mousePoint2.Y));
         }
         public Point GetMousePosition()
         {
