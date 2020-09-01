@@ -20,6 +20,7 @@ namespace DrawingBoard
     /// </summary>
     public partial class MainWindow : Window
     {
+        Brush fillColor = Brushes.White, lineColor = Brushes.Black;
         Line drawLine;
         Rectangle drawRectangle;
         Point mousePoint1, mousePoint2;
@@ -51,7 +52,9 @@ namespace DrawingBoard
             drawRectangle = new Rectangle();
             drawRectangle.Width = (x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2);
             drawRectangle.Height = (y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2);
-            drawRectangle.Fill = Brushes.Black;
+            drawRectangle.Fill = fillColor;
+            drawRectangle.Stroke = lineColor;
+            drawRectangle.StrokeThickness = 1;
             Canvas.SetLeft(drawRectangle, (x1 < x2 ? x1 : x2));
             Canvas.SetTop(drawRectangle, (y1 < y2 ? y1 : y2));
             return drawRectangle;
@@ -63,8 +66,8 @@ namespace DrawingBoard
             drawLine.Y1 = y1;
             drawLine.X2 = x2;
             drawLine.Y2 = y2;
-            drawLine.Stroke = Brushes.Red;
-            drawLine.StrokeThickness = 2;
+            drawLine.Stroke = lineColor;
+            drawLine.StrokeThickness = 1;
             return drawLine;
         }
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
@@ -113,6 +116,15 @@ namespace DrawingBoard
                         break;
                 }
             }
+        }
+
+        private void LineColorPicker_Changed(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            lineColor = new SolidColorBrush(e.NewValue.Value);
+        }
+        private void FillColorPicker_Changed(object sender, RoutedPropertyChangedEventArgs<Color?> e)
+        {
+            fillColor = new SolidColorBrush(e.NewValue.Value);
         }
 
         public Point GetMousePosition()

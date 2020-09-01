@@ -4,16 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DrawingBoard"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="522" Width="1011.5">
     <Grid>
-        <TextBox Name="PositionX1" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="X1" VerticalAlignment="Top" Margin="629,122,0,0" Width="60"/>
-        <TextBox Name="PositionY1" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Y1" VerticalAlignment="Top" Margin="689,122,0,0" Width="60"/>
-        <TextBox Name="PositionX2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="X2" VerticalAlignment="Top" Margin="629,145,0,0" Width="60"/>
-        <TextBox Name="PositionY2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Y2" VerticalAlignment="Top" Margin="689,145,0,0" Width="60"/>
-        <Image Height="59" Width="50" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Source="./image/LineButton.png" MouseDown="LineButton_MouseDown"/>
-        <Image Height="59" Width="50" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,0,0,0" Source="./image/RectangleButton.png" MouseDown="RectangleButton_MouseDown"/>
-        <Canvas Name="MainCanvas" Panel.ZIndex="-1" MouseMove="MainCanvas_MouseMove" MouseDown="Button_MouseDown" MouseUp="Button_MouseUp">
-        </Canvas>
+        <Canvas Name="MainCanvas" Panel.ZIndex="-1" MouseMove="MainCanvas_MouseMove" MouseDown="Button_MouseDown" MouseUp="Button_MouseUp"/>
+        <xctk:ColorPicker Name="LineColorPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColorChanged="LineColorPicker_Changed" Height="30" Width="50" DisplayColorAndName="False"  Margin="156,10,606,379" />
+        <xctk:ColorPicker Name="FillColorPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColorChanged="FillColorPicker_Changed" Height="30" Width="50" DisplayColorAndName="False"  Margin="216,10,606,379" />
+        <TextBox Name="PositionX1" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="X1" Margin="629,122,0,0" Height="23" Width="60"/>
+        <TextBox Name="PositionY1" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="Y1" Margin="689,122,0,0" Height="23" Width="60"/>
+        <TextBox Name="PositionX2" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="X2" Margin="629,145,0,0" Height="23" Width="60"/>
+        <TextBox Name="PositionY2" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="Y2" Margin="689,145,0,0" Height="23" Width="60"/>
+        <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Source="./image/LineButton.png" MouseDown="LineButton_MouseDown"/>
+        <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="59,0,0,0" Source="./image/RectangleButton.png" MouseDown="RectangleButton_MouseDown"/>
     </Grid>
 </Window>
