@@ -13,7 +13,7 @@
         <TextBox Name="PositionY2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="Y2" VerticalAlignment="Top" Margin="689,145,0,0" Width="60"/>
         <Image Height="59" Width="50" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Source="./image/LineButton.png" MouseDown="LineButton_MouseDown"/>
         <Image Height="59" Width="50" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="50,0,0,0" Source="./image/RectangleButton.png" MouseDown="RectangleButton_MouseDown"/>
-        <Canvas Name="MainCanvas" Panel.ZIndex="-1" MouseDown="Button_MouseDown" MouseUp="Button_MouseUp">
+        <Canvas Name="MainCanvas" Panel.ZIndex="-1" MouseMove="MainCanvas_MouseMove" MouseDown="Button_MouseDown" MouseUp="Button_MouseUp">
         </Canvas>
     </Grid>
 </Window>

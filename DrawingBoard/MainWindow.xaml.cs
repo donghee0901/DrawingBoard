@@ -20,7 +20,10 @@ namespace DrawingBoard
     /// </summary>
     public partial class MainWindow : Window
     {
+        Line drawLine;
+        Rectangle drawRectangle;
         Point mousePoint1, mousePoint2;
+        bool onClickingMouse = false;
         int shape = 1;
         public MainWindow()
         {
@@ -45,7 +48,7 @@ namespace DrawingBoard
         }
         public Rectangle DrawRectangle(double x1, double y1, double x2, double y2)
         {
-            Rectangle drawRectangle = new Rectangle();
+            drawRectangle = new Rectangle();
             drawRectangle.Width = (x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2);
             drawRectangle.Height = (y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2);
             drawRectangle.Fill = Brushes.Black;
@@ -55,7 +58,7 @@ namespace DrawingBoard
         }
         public Line DrawLine(double x1, double y1, double x2, double y2)
         {
-            Line drawLine = new Line();
+            drawLine = new Line();
             drawLine.X1 = x1;
             drawLine.Y1 = y1;
             drawLine.X2 = x2;
@@ -66,17 +69,19 @@ namespace DrawingBoard
         }
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            onClickingMouse = true;
             mousePoint1 = GetMousePosition();
             PositionX1.Text = mousePoint1.X.ToString();
             PositionY1.Text = mousePoint1.Y.ToString();
+            MainCanvas.Children.Add(DrawShape(mousePoint1.X, mousePoint1.Y, mousePoint2.X, mousePoint2.Y));
         }
 
         private void Button_MouseUp(object sender, MouseButtonEventArgs e)
         {
+            onClickingMouse = false;
             mousePoint2 = GetMousePosition();
             PositionX2.Text = mousePoint2.X.ToString();
             PositionY2.Text = mousePoint2.Y.ToString();
-            MainCanvas.Children.Add(DrawShape(mousePoint1.X, mousePoint1.Y, mousePoint2.X, mousePoint2.Y));
         }
 
         private void LineButton_MouseDown(object sender, MouseButtonEventArgs e)
@@ -86,6 +91,28 @@ namespace DrawingBoard
         private void RectangleButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             shape = 2;
+        }
+
+        private void MainCanvas_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (onClickingMouse)
+            {
+                switch (shape)
+                {
+                    case 1:
+                        mousePoint2 = GetMousePosition();
+                        drawLine.X2 = mousePoint2.X;
+                        drawLine.Y2 = mousePoint2.Y;
+                        break;
+                    case 2:
+                        mousePoint2 = GetMousePosition();
+                        drawRectangle.Width = (mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X) - (mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X);
+                        drawRectangle.Height = (mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y) - (mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
+                        Canvas.SetLeft(drawRectangle, (mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X));
+                        Canvas.SetTop(drawRectangle, (mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y));
+                        break;
+                }
+            }
         }
 
         public Point GetMousePosition()
