@@ -17,12 +17,14 @@
             <StackPanel Orientation="Horizontal">
                 <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Source="./image/LineButton.png" MouseDown="LineButton_MouseDown"/>
                 <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Source="./image/RectangleButton.png" MouseDown="RectangleButton_MouseDown"/>
+                <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Source="./image/TriangleButton.png" MouseDown="TriangleButton_MouseDown"/>
                 <xctk:ColorPicker Name="LineColorPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColorChanged="LineColorPicker_Changed" Height="30" Width="50" DisplayColorAndName="False"  Margin="50 10 0 0" />
                 <xctk:ColorPicker Name="FillColorPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColorChanged="FillColorPicker_Changed" Height="30" Width="50" DisplayColorAndName="False"  Margin="0 10 0 0" />
             </StackPanel>
         </Grid>
 
         <Grid Grid.Row="1">
+            <Polygon Points="0,0 100,50, 0,100 1---" Stroke="Black" Fill="Black" />
             <TextBox Name="PositionX1" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="X1" Margin="629,122,0,0" Height="23" Width="60"/>
             <TextBox Name="PositionY1" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="Y1" Margin="689,122,0,0" Height="23" Width="60"/>
             <TextBox Name="PositionX2" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="X2" Margin="629,145,0,0" Height="23" Width="60"/>

@@ -23,6 +23,7 @@ namespace DrawingBoard
         Brush fillColor = Brushes.White, lineColor = Brushes.Black;
         Line drawLine;
         Rectangle drawRectangle;
+        Polygon
         Point mousePoint1, mousePoint2;
         bool onClickingMouse = false;
         int shape = 1;
@@ -43,6 +44,8 @@ namespace DrawingBoard
                     return DrawLine(x1, y1, x2, y2);
                 case 2:
                     return DrawRectangle(x1, y1, x2, y2);
+                case 3:
+                    return DrawTriangle(x1, y1, x2, y2);
                 default:
                     return DrawLine(0, 0, 0, 0);
             }
@@ -70,6 +73,18 @@ namespace DrawingBoard
             drawLine.StrokeThickness = 1;
             return drawLine;
         }
+        public Line DrawTriangle(double x1, double y1, double x2, double y2)
+        {
+            drawLine = new Line();
+            drawLine.X1 = x1;
+            drawLine.Y1 = y1;
+            drawLine.X2 = x2;
+            drawLine.Y2 = y2;
+            drawLine.Stroke = lineColor;
+            drawLine.StrokeThickness = 1;
+            return drawLine;
+        }
+        //<Polygon Points = "0,0 100,50, 0,100" Stroke="Black" Fill="Black" />
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
             onClickingMouse = true;
@@ -95,6 +110,11 @@ namespace DrawingBoard
         {
             shape = 2;
         }
+        private void TriangleButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            shape = 3;
+        }
+
 
         private void MainCanvas_MouseMove(object sender, MouseEventArgs e)
         {
@@ -122,6 +142,7 @@ namespace DrawingBoard
         {
             lineColor = new SolidColorBrush(e.NewValue.Value);
         }
+
         private void FillColorPicker_Changed(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
             fillColor = new SolidColorBrush(e.NewValue.Value);
