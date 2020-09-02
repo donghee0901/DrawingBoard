@@ -6,16 +6,28 @@
         xmlns:local="clr-namespace:DrawingBoard"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="522" Width="1011.5">
+        Title="MainWindow" Height="424.5" Width="839">
     <Grid>
-        <Canvas Name="MainCanvas" Panel.ZIndex="-1" MouseMove="MainCanvas_MouseMove" MouseDown="Button_MouseDown" MouseUp="Button_MouseUp"/>
-        <xctk:ColorPicker Name="LineColorPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColorChanged="LineColorPicker_Changed" Height="30" Width="50" DisplayColorAndName="False"  Margin="156,10,606,379" />
-        <xctk:ColorPicker Name="FillColorPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColorChanged="FillColorPicker_Changed" Height="30" Width="50" DisplayColorAndName="False"  Margin="216,10,606,379" />
-        <TextBox Name="PositionX1" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="X1" Margin="629,122,0,0" Height="23" Width="60"/>
-        <TextBox Name="PositionY1" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="Y1" Margin="689,122,0,0" Height="23" Width="60"/>
-        <TextBox Name="PositionX2" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="X2" Margin="629,145,0,0" Height="23" Width="60"/>
-        <TextBox Name="PositionY2" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="Y2" Margin="689,145,0,0" Height="23" Width="60"/>
-        <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Source="./image/LineButton.png" MouseDown="LineButton_MouseDown"/>
-        <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="59,0,0,0" Source="./image/RectangleButton.png" MouseDown="RectangleButton_MouseDown"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <StackPanel Orientation="Horizontal">
+                <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Source="./image/LineButton.png" MouseDown="LineButton_MouseDown"/>
+                <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Source="./image/RectangleButton.png" MouseDown="RectangleButton_MouseDown"/>
+                <xctk:ColorPicker Name="LineColorPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColorChanged="LineColorPicker_Changed" Height="30" Width="50" DisplayColorAndName="False"  Margin="50 10 0 0" />
+                <xctk:ColorPicker Name="FillColorPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColorChanged="FillColorPicker_Changed" Height="30" Width="50" DisplayColorAndName="False"  Margin="0 10 0 0" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <TextBox Name="PositionX1" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="X1" Margin="629,122,0,0" Height="23" Width="60"/>
+            <TextBox Name="PositionY1" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="Y1" Margin="689,122,0,0" Height="23" Width="60"/>
+            <TextBox Name="PositionX2" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="X2" Margin="629,145,0,0" Height="23" Width="60"/>
+            <TextBox Name="PositionY2" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="Y2" Margin="689,145,0,0" Height="23" Width="60"/>
+            <Canvas Name="MainCanvas" Panel.ZIndex="-1" MouseMove="MainCanvas_MouseMove" MouseDown="Button_MouseDown" MouseUp="Button_MouseUp"/>
+        </Grid>
     </Grid>
 </Window>
