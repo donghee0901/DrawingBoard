@@ -23,7 +23,7 @@ namespace DrawingBoard
         Brush fillColor = Brushes.White, lineColor = Brushes.Black;
         Line drawLine;
         Rectangle drawRectangle;
-        Polygon
+        Polygon drawTriangle;
         Point mousePoint1, mousePoint2;
         bool onClickingMouse = false;
         int shape = 1;
@@ -35,6 +35,7 @@ namespace DrawingBoard
             background.Height = 450;
             background.Fill = Brushes.White;
             MainCanvas.Children.Add(background);
+            MainCanvas.Children.Add(DrawTriangle(1,1,1,1));
         }
         public Shape DrawShape(double x1, double y1, double x2, double y2)
         {
@@ -73,16 +74,20 @@ namespace DrawingBoard
             drawLine.StrokeThickness = 1;
             return drawLine;
         }
-        public Line DrawTriangle(double x1, double y1, double x2, double y2)
+        public Polygon DrawTriangle(double x1, double y1, double x2, double y2)
         {
-            drawLine = new Line();
-            drawLine.X1 = x1;
-            drawLine.Y1 = y1;
-            drawLine.X2 = x2;
-            drawLine.Y2 = y2;
-            drawLine.Stroke = lineColor;
-            drawLine.StrokeThickness = 1;
-            return drawLine;
+            drawTriangle = new Polygon();
+            PointCollection myPointCollection = new PointCollection();
+            Point p1 = new Point(0, 0);
+            Point p2 = new Point(100, 50);
+            Point p3 = new Point(100, 0);
+            myPointCollection.Add(p1);
+            myPointCollection.Add(p2);
+            myPointCollection.Add(p3);
+            drawTriangle.Points = new PointCollection(myPointCollection);
+            drawTriangle.Stroke = lineColor;
+            drawTriangle.StrokeThickness = 1;
+            return drawTriangle;
         }
         //<Polygon Points = "0,0 100,50, 0,100" Stroke="Black" Fill="Black" />
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)

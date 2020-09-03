@@ -24,7 +24,6 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <Polygon Points="0,0 100,50, 0,100 1---" Stroke="Black" Fill="Black" />
             <TextBox Name="PositionX1" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="X1" Margin="629,122,0,0" Height="23" Width="60"/>
             <TextBox Name="PositionY1" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="Y1" Margin="689,122,0,0" Height="23" Width="60"/>
             <TextBox Name="PositionX2" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="X2" Margin="629,145,0,0" Height="23" Width="60"/>
