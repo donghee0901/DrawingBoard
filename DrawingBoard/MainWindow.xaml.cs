@@ -24,9 +24,10 @@ namespace DrawingBoard
         Line drawLine;
         Rectangle drawRectangle;
         Polygon drawTriangle;
+        PointCollection TrianglePoint;
         Point mousePoint1, mousePoint2;
         bool onClickingMouse = false;
-        int shape = 1;
+        int shape = 3;
         public MainWindow()
         {
             InitializeComponent();
@@ -35,7 +36,8 @@ namespace DrawingBoard
             background.Height = 450;
             background.Fill = Brushes.White;
             MainCanvas.Children.Add(background);
-            MainCanvas.Children.Add(DrawTriangle(1,1,1,1));
+
+            MainCanvas.Children.Add(DrawTriangle(100, 100, 200, 200));
         }
         public Shape DrawShape(double x1, double y1, double x2, double y2)
         {
@@ -77,16 +79,17 @@ namespace DrawingBoard
         public Polygon DrawTriangle(double x1, double y1, double x2, double y2)
         {
             drawTriangle = new Polygon();
-            PointCollection myPointCollection = new PointCollection();
-            Point p1 = new Point(0, 0);
-            Point p2 = new Point(100, 50);
-            Point p3 = new Point(100, 0);
-            myPointCollection.Add(p1);
-            myPointCollection.Add(p2);
-            myPointCollection.Add(p3);
-            drawTriangle.Points = new PointCollection(myPointCollection);
+            TrianglePoint = new PointCollection();
+
+            TrianglePoint.Add(new Point((x1 < x2 ? x1 : x2), (y1 > y2 ? y1 : y2)));
+            TrianglePoint.Add(new Point((x1 < x2 ? x1 : x2) + (((x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2)) / 2), (y1 < y2 ? y1 : y2)));
+            TrianglePoint.Add(new Point((x1 > x2 ? x1 : x2), (y1 > y2 ? y1 : y2)));
+
+            drawTriangle.Points = TrianglePoint;
+            drawTriangle.Fill = fillColor;
             drawTriangle.Stroke = lineColor;
             drawTriangle.StrokeThickness = 1;
+
             return drawTriangle;
         }
         //<Polygon Points = "0,0 100,50, 0,100" Stroke="Black" Fill="Black" />
@@ -96,7 +99,7 @@ namespace DrawingBoard
             mousePoint1 = GetMousePosition();
             PositionX1.Text = mousePoint1.X.ToString();
             PositionY1.Text = mousePoint1.Y.ToString();
-            MainCanvas.Children.Add(DrawShape(mousePoint1.X, mousePoint1.Y, mousePoint2.X, mousePoint2.Y));
+            MainCanvas.Children.Add(DrawShape(mousePoint1.X, mousePoint1.Y, mousePoint1.X, mousePoint1.Y));
         }
 
         private void Button_MouseUp(object sender, MouseButtonEventArgs e)
@@ -138,6 +141,13 @@ namespace DrawingBoard
                         drawRectangle.Height = (mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y) - (mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
                         Canvas.SetLeft(drawRectangle, (mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X));
                         Canvas.SetTop(drawRectangle, (mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y));
+                        break;
+                    case 3:
+                        mousePoint2 = GetMousePosition();
+                        TrianglePoint.Clear();
+                        TrianglePoint.Add(new Point((mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X), (mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y)));
+                        TrianglePoint.Add(new Point((mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X) + (((mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X) - (mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X)) / 2), (mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y)));
+                        TrianglePoint.Add(new Point((mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X), (mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y)));
                         break;
                 }
             }
