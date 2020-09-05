@@ -119,5 +119,9 @@
   <ItemGroup>
     <Resource Include="image\TriangleButton.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\FillColorBorder.png" />
+    <Resource Include="image\LineColorBorder.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

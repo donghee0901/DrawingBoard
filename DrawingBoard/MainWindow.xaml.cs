@@ -32,8 +32,8 @@ namespace DrawingBoard
         {
             InitializeComponent();
             Rectangle background = new Rectangle();
-            background.Width = 800;
-            background.Height = 450;
+            background.Width = 985;
+            background.Height = 412;
             background.Fill = Brushes.White;
             MainCanvas.Children.Add(background);
 
@@ -92,13 +92,12 @@ namespace DrawingBoard
 
             return drawTriangle;
         }
-        //<Polygon Points = "0,0 100,50, 0,100" Stroke="Black" Fill="Black" />
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
             onClickingMouse = true;
             mousePoint1 = GetMousePosition();
-            PositionX1.Text = mousePoint1.X.ToString();
-            PositionY1.Text = mousePoint1.Y.ToString();
+            //PositionX1.Text = mousePoint1.X.ToString();
+            //PositionY1.Text = mousePoint1.Y.ToString();
             MainCanvas.Children.Add(DrawShape(mousePoint1.X, mousePoint1.Y, mousePoint1.X, mousePoint1.Y));
         }
 
@@ -106,8 +105,8 @@ namespace DrawingBoard
         {
             onClickingMouse = false;
             mousePoint2 = GetMousePosition();
-            PositionX2.Text = mousePoint2.X.ToString();
-            PositionY2.Text = mousePoint2.Y.ToString();
+            //PositionX2.Text = mousePoint2.X.ToString();
+            //PositionY2.Text = mousePoint2.Y.ToString();
         }
 
         private void LineButton_MouseDown(object sender, MouseButtonEventArgs e)
