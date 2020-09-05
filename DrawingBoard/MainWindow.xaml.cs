@@ -20,6 +20,7 @@ namespace DrawingBoard
     /// </summary>
     public partial class MainWindow : Window
     {
+        Rectangle background = new Rectangle();
         Brush fillColor = Brushes.White, lineColor = Brushes.Black;
         Line drawLine;
         Rectangle drawRectangle;
@@ -31,9 +32,8 @@ namespace DrawingBoard
         public MainWindow()
         {
             InitializeComponent();
-            Rectangle background = new Rectangle();
-            background.Width = 985;
-            background.Height = 412;
+            background.Width = 1000 - 15;
+            background.Height = 500 - 88;
             background.Fill = Brushes.White;
             MainCanvas.Children.Add(background);
 
@@ -155,6 +155,12 @@ namespace DrawingBoard
         private void LineColorPicker_Changed(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
             lineColor = new SolidColorBrush(e.NewValue.Value);
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            background.Height = e.NewSize.Height - 88;
+            background.Width = e.NewSize.Width - 15;
         }
 
         private void FillColorPicker_Changed(object sender, RoutedPropertyChangedEventArgs<Color?> e)

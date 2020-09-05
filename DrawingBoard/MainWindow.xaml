@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:DrawingBoard"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="1000" Background="Black">
+        Title="MainWindow" Height="500" Width="1000" Background="Black"
+        SizeChanged="Window_SizeChanged">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
