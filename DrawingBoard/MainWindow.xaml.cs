@@ -26,9 +26,10 @@ namespace DrawingBoard
         Rectangle drawRectangle;
         Polygon drawTriangle;
         PointCollection TrianglePoint;
+        Ellipse drawCircle;
         Point mousePoint1, mousePoint2;
         bool onClickingMouse = false;
-        int shape = 3;
+        int shape = 1;
         public MainWindow()
         {
             InitializeComponent();
@@ -36,8 +37,6 @@ namespace DrawingBoard
             background.Height = 500 - 88;
             background.Fill = Brushes.White;
             MainCanvas.Children.Add(background);
-
-            MainCanvas.Children.Add(DrawTriangle(100, 100, 200, 200));
         }
         public Shape DrawShape(double x1, double y1, double x2, double y2)
         {
@@ -49,6 +48,8 @@ namespace DrawingBoard
                     return DrawRectangle(x1, y1, x2, y2);
                 case 3:
                     return DrawTriangle(x1, y1, x2, y2);
+                case 4:
+                    return DrawCircle(x1, y1, x2, y2);
                 default:
                     return DrawLine(0, 0, 0, 0);
             }
@@ -92,6 +93,18 @@ namespace DrawingBoard
 
             return drawTriangle;
         }
+        public Ellipse DrawCircle(double x1, double y1, double x2, double y2)
+        {
+            drawCircle = new Ellipse();
+            drawCircle.Width = (x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2);
+            drawCircle.Height = (y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2);
+            drawCircle.Fill = fillColor;
+            drawCircle.Stroke = lineColor;
+            drawCircle.StrokeThickness = 1;
+            Canvas.SetLeft(drawCircle, (x1 < x2 ? x1 : x2));
+            Canvas.SetTop(drawCircle, (y1 < y2 ? y1 : y2));
+            return drawCircle;
+        }
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
             onClickingMouse = true;
@@ -121,32 +134,41 @@ namespace DrawingBoard
         {
             shape = 3;
         }
+        private void CircleButton_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            shape = 4;
+        }
+
 
 
         private void MainCanvas_MouseMove(object sender, MouseEventArgs e)
         {
+            mousePoint2 = GetMousePosition();
             if (onClickingMouse)
             {
                 switch (shape)
                 {
                     case 1:
-                        mousePoint2 = GetMousePosition();
                         drawLine.X2 = mousePoint2.X;
                         drawLine.Y2 = mousePoint2.Y;
                         break;
                     case 2:
-                        mousePoint2 = GetMousePosition();
                         drawRectangle.Width = (mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X) - (mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X);
                         drawRectangle.Height = (mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y) - (mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
                         Canvas.SetLeft(drawRectangle, (mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X));
                         Canvas.SetTop(drawRectangle, (mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y));
                         break;
                     case 3:
-                        mousePoint2 = GetMousePosition();
                         TrianglePoint.Clear();
                         TrianglePoint.Add(new Point((mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X), (mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y)));
                         TrianglePoint.Add(new Point((mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X) + (((mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X) - (mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X)) / 2), (mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y)));
                         TrianglePoint.Add(new Point((mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X), (mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y)));
+                        break;
+                    case 4:
+                        drawCircle.Width = (mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X) - (mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X);
+                        drawCircle.Height = (mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y) - (mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
+                        Canvas.SetLeft(drawCircle, (mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X));
+                        Canvas.SetTop(drawCircle, (mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y));
                         break;
                 }
             }

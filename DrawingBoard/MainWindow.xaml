@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:DrawingBoard"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="1000" Background="Black"
-        SizeChanged="Window_SizeChanged">
+        Title="Drawing Board" Height="500" Width="1000" Background="Black"
+        SizeChanged="Window_SizeChanged" Icon="./image/DrawingBoradIcon.png">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -19,6 +19,7 @@
                 <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Source="./image/LineButton.png" MouseDown="LineButton_MouseDown"/>
                 <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Source="./image/RectangleButton.png" MouseDown="RectangleButton_MouseDown"/>
                 <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Source="./image/TriangleButton.png" MouseDown="TriangleButton_MouseDown"/>
+                <Image Height="50" Width="59" HorizontalAlignment="Left" VerticalAlignment="Top" Source="./image/CircleButton.png" MouseDown="CircleButton_MouseDown"/>
                 <Grid>
                     <Image Height="50" Width="67" HorizontalAlignment="Left" VerticalAlignment="Top" Source="./image/FillColorBorder.png" Margin="0,0,0,-0.4"/>
                     <xctk:ColorPicker Panel.ZIndex="1" Name="FillColorPicker" HorizontalAlignment="Left" VerticalAlignment="Top" SelectedColorChanged="FillColorPicker_Changed" Height="30" Width="50" DisplayColorAndName="False"  Margin="9 15 0 0"/>

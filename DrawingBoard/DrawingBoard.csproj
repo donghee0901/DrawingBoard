@@ -123,5 +123,11 @@
     <Resource Include="image\FillColorBorder.png" />
     <Resource Include="image\LineColorBorder.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\DrawingBoradIcon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="image\CircleButton.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
