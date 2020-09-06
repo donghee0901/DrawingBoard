@@ -20,6 +20,7 @@ namespace DrawingBoard
     /// </summary>
     public partial class MainWindow : Window
     {
+        Ellipse[] ShapeControlDot = new Ellipse[8];
         Rectangle background = new Rectangle();
         Brush fillColor = Brushes.White, lineColor = Brushes.Black;
         Line drawLine;
@@ -37,6 +38,8 @@ namespace DrawingBoard
             background.Height = 500 - 88;
             background.Fill = Brushes.White;
             MainCanvas.Children.Add(background);
+            SettingShapeControlDot();
+            ShowShapeControlDot(10, 10, 100, 100);
         }
         public Shape DrawShape(double x1, double y1, double x2, double y2)
         {
@@ -120,6 +123,52 @@ namespace DrawingBoard
             mousePoint2 = GetMousePosition();
             //PositionX2.Text = mousePoint2.X.ToString();
             //PositionY2.Text = mousePoint2.Y.ToString();
+        }
+
+        void SettingShapeControlDot()
+        {
+            for(int i = 0; i < 8; i++)
+            {
+                ShapeControlDot[i] = new Ellipse();
+                ShapeControlDot[i].Width = 5;
+                ShapeControlDot[i].Height = 5;
+                ShapeControlDot[i].Fill = Brushes.White;
+                ShapeControlDot[i].Stroke = Brushes.Black;
+                ShapeControlDot[i].StrokeThickness = 2;
+                ShapeControlDot[i].Visibility = Visibility.Collapsed;
+                MainCanvas.Children.Add(ShapeControlDot[i]);
+            }
+        }
+        void ShowShapeControlDot(double x1, double y1, double x2, double y2)
+        {
+            Canvas.SetLeft(ShapeControlDot[0], (x1 < x2 ? x1 : x2));
+            Canvas.SetTop(ShapeControlDot[0], (y1 < y2 ? y1 : y2));
+
+            Canvas.SetLeft(ShapeControlDot[1], ((x1 < x2 ? x1 : x2) + (((x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2)) / 2)));
+            Canvas.SetTop(ShapeControlDot[1], (y1 < y2 ? y1 : y2));
+
+            Canvas.SetLeft(ShapeControlDot[2], (x1 > x2 ? x1 : x2));
+            Canvas.SetTop(ShapeControlDot[2], (y1 < y2 ? y1 : y2));
+
+            Canvas.SetLeft(ShapeControlDot[3], (x1 < x2 ? x1 : x2));
+            Canvas.SetTop(ShapeControlDot[3], ((y1 < y2 ? y1 : y2) + (((y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2)) / 2)));
+
+            Canvas.SetLeft(ShapeControlDot[4], (x1 > x2 ? x1 : x2));
+            Canvas.SetTop(ShapeControlDot[4], ((y1 < y2 ? y1 : y2) + (((y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2)) / 2)));
+
+            Canvas.SetLeft(ShapeControlDot[5], (x1 < x2 ? x1 : x2));
+            Canvas.SetTop(ShapeControlDot[5], (y1 > y2 ? y1 : y2));
+
+            Canvas.SetLeft(ShapeControlDot[6], ((x1 < x2 ? x1 : x2) + (((x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2)) / 2)));
+            Canvas.SetTop(ShapeControlDot[6], (y1 > y2 ? y1 : y2));
+
+            Canvas.SetLeft(ShapeControlDot[7], (x1 > x2 ? x1 : x2));
+            Canvas.SetTop(ShapeControlDot[7], (y1 > y2 ? y1 : y2));
+
+            for(int i = 0; i < 8; i++)
+            {
+                ShapeControlDot[i].Visibility = Visibility.Visible;
+            }
         }
 
         private void LineButton_MouseDown(object sender, MouseButtonEventArgs e)
