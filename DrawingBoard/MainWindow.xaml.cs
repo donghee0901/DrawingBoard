@@ -29,7 +29,8 @@ namespace DrawingBoard
         PointCollection TrianglePoint;
         Ellipse drawCircle;
         Point mousePoint1, mousePoint2;
-        bool onClickingMouse = false;
+        bool onClickDrawShape = false;
+        bool onClickContorlDot = false;
         int shape = 1;
         public MainWindow()
         {
@@ -110,7 +111,7 @@ namespace DrawingBoard
         }
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            onClickingMouse = true;
+            onClickDrawShape = true;
             mousePoint1 = GetMousePosition();
             //PositionX1.Text = mousePoint1.X.ToString();
             //PositionY1.Text = mousePoint1.Y.ToString();
@@ -119,8 +120,11 @@ namespace DrawingBoard
 
         private void Button_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            onClickingMouse = false;
+            onClickDrawShape = false;
+            onClickContorlDot = false;
             mousePoint2 = GetMousePosition();
+
+            ShowShapeControlDot(mousePoint1.X, mousePoint1.Y, mousePoint2.X, mousePoint2.Y);
             //PositionX2.Text = mousePoint2.X.ToString();
             //PositionY2.Text = mousePoint2.Y.ToString();
         }
@@ -136,39 +140,50 @@ namespace DrawingBoard
                 ShapeControlDot[i].Stroke = Brushes.Black;
                 ShapeControlDot[i].StrokeThickness = 2;
                 ShapeControlDot[i].Visibility = Visibility.Collapsed;
+                ShapeControlDot[i].MouseDown += ShapeControlDot_MouseDown;
+                ShapeControlDot[i].MouseDown += ShapeControlDot_MouseDown;
+                ShapeControlDot[i].Name = ("ID_" + (i + 1).ToString());
+                Panel.SetZIndex(ShapeControlDot[i], 10);
                 MainCanvas.Children.Add(ShapeControlDot[i]);
             }
         }
         void ShowShapeControlDot(double x1, double y1, double x2, double y2)
         {
-            Canvas.SetLeft(ShapeControlDot[0], (x1 < x2 ? x1 : x2));
-            Canvas.SetTop(ShapeControlDot[0], (y1 < y2 ? y1 : y2));
+            Canvas.SetLeft(ShapeControlDot[0], (x1 < x2 ? x1 : x2) - 2);
+            Canvas.SetTop(ShapeControlDot[0], (y1 < y2 ? y1 : y2) - 2);
 
-            Canvas.SetLeft(ShapeControlDot[1], ((x1 < x2 ? x1 : x2) + (((x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2)) / 2)));
-            Canvas.SetTop(ShapeControlDot[1], (y1 < y2 ? y1 : y2));
+            Canvas.SetLeft(ShapeControlDot[1], ((x1 < x2 ? x1 : x2) + (((x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2)) / 2)) - 2);
+            Canvas.SetTop(ShapeControlDot[1], (y1 < y2 ? y1 : y2) - 2);
 
-            Canvas.SetLeft(ShapeControlDot[2], (x1 > x2 ? x1 : x2));
-            Canvas.SetTop(ShapeControlDot[2], (y1 < y2 ? y1 : y2));
+            Canvas.SetLeft(ShapeControlDot[2], (x1 > x2 ? x1 : x2) - 2);
+            Canvas.SetTop(ShapeControlDot[2], (y1 < y2 ? y1 : y2) - 2);
 
-            Canvas.SetLeft(ShapeControlDot[3], (x1 < x2 ? x1 : x2));
-            Canvas.SetTop(ShapeControlDot[3], ((y1 < y2 ? y1 : y2) + (((y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2)) / 2)));
+            Canvas.SetLeft(ShapeControlDot[3], (x1 < x2 ? x1 : x2) - 2);
+            Canvas.SetTop(ShapeControlDot[3], ((y1 < y2 ? y1 : y2) + (((y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2)) / 2)) - 2);
 
-            Canvas.SetLeft(ShapeControlDot[4], (x1 > x2 ? x1 : x2));
-            Canvas.SetTop(ShapeControlDot[4], ((y1 < y2 ? y1 : y2) + (((y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2)) / 2)));
+            Canvas.SetLeft(ShapeControlDot[4], (x1 > x2 ? x1 : x2) - 2);
+            Canvas.SetTop(ShapeControlDot[4], ((y1 < y2 ? y1 : y2) + (((y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2)) / 2)) - 2);
 
-            Canvas.SetLeft(ShapeControlDot[5], (x1 < x2 ? x1 : x2));
-            Canvas.SetTop(ShapeControlDot[5], (y1 > y2 ? y1 : y2));
+            Canvas.SetLeft(ShapeControlDot[5], (x1 < x2 ? x1 : x2) - 2);
+            Canvas.SetTop(ShapeControlDot[5], (y1 > y2 ? y1 : y2) - 2);
 
-            Canvas.SetLeft(ShapeControlDot[6], ((x1 < x2 ? x1 : x2) + (((x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2)) / 2)));
-            Canvas.SetTop(ShapeControlDot[6], (y1 > y2 ? y1 : y2));
+            Canvas.SetLeft(ShapeControlDot[6], ((x1 < x2 ? x1 : x2) + (((x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2)) / 2)) - 2);
+            Canvas.SetTop(ShapeControlDot[6], (y1 > y2 ? y1 : y2) - 2);
 
-            Canvas.SetLeft(ShapeControlDot[7], (x1 > x2 ? x1 : x2));
-            Canvas.SetTop(ShapeControlDot[7], (y1 > y2 ? y1 : y2));
+            Canvas.SetLeft(ShapeControlDot[7], (x1 > x2 ? x1 : x2) - 2);
+            Canvas.SetTop(ShapeControlDot[7], (y1 > y2 ? y1 : y2) - 2);
 
             for(int i = 0; i < 8; i++)
             {
                 ShapeControlDot[i].Visibility = Visibility.Visible;
             }
+        }
+        string selectID;
+        private void ShapeControlDot_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            string selectID = (sender as DependencyObject).GetValue(Grid.NameProperty) as string;
+
+            onClickContorlDot = true;
         }
 
         private void LineButton_MouseDown(object sender, MouseButtonEventArgs e)
@@ -192,9 +207,26 @@ namespace DrawingBoard
 
         private void MainCanvas_MouseMove(object sender, MouseEventArgs e)
         {
-            mousePoint2 = GetMousePosition();
-            if (onClickingMouse)
+            if(onClickContorlDot)
             {
+                mousePoint2 = GetMousePosition();
+                ShowShapeControlDot(mousePoint1.X, mousePoint1.Y, mousePoint2.X, mousePoint2.Y);
+                //switch (selectID)
+                //{
+                //    case "ID_1":
+                //    case "ID_2":
+                //    case "ID_3":
+                //    case "ID_4":
+                //    case "ID_5":
+                //    case "ID_6":
+                //    case "ID_7":
+                //    case "ID_8":
+                //}
+            }
+            if (onClickDrawShape)
+            {
+                mousePoint2 = GetMousePosition();
+
                 switch (shape)
                 {
                     case 1:
