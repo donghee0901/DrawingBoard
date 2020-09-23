@@ -29,6 +29,7 @@ namespace DrawingBoard
         PointCollection TrianglePoint;
         Ellipse drawCircle;
         Point mousePoint1, mousePoint2;
+        Point controlDotMousePoint1, controlDotMousePoint2;
         bool onClickDrawShape = false;
         bool onClickContorlDot = false;
         int shape = 1;
@@ -109,25 +110,6 @@ namespace DrawingBoard
             Canvas.SetTop(drawCircle, (y1 < y2 ? y1 : y2));
             return drawCircle;
         }
-        private void Button_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            onClickDrawShape = true;
-            mousePoint1 = GetMousePosition();
-            //PositionX1.Text = mousePoint1.X.ToString();
-            //PositionY1.Text = mousePoint1.Y.ToString();
-            MainCanvas.Children.Add(DrawShape(mousePoint1.X, mousePoint1.Y, mousePoint1.X, mousePoint1.Y));
-        }
-
-        private void Button_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            onClickDrawShape = false;
-            onClickContorlDot = false;
-            mousePoint2 = GetMousePosition();
-
-            ShowShapeControlDot(mousePoint1.X, mousePoint1.Y, mousePoint2.X, mousePoint2.Y);
-            //PositionX2.Text = mousePoint2.X.ToString();
-            //PositionY2.Text = mousePoint2.Y.ToString();
-        }
 
         void SettingShapeControlDot()
         {
@@ -178,13 +160,6 @@ namespace DrawingBoard
                 ShapeControlDot[i].Visibility = Visibility.Visible;
             }
         }
-        string selectID;
-        private void ShapeControlDot_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            string selectID = (sender as DependencyObject).GetValue(Grid.NameProperty) as string;
-
-            onClickContorlDot = true;
-        }
 
         private void LineButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -203,33 +178,65 @@ namespace DrawingBoard
             shape = 4;
         }
 
+        string selectID;
+        private void ShapeControlDot_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            selectID = (sender as DependencyObject).GetValue(Ellipse.NameProperty) as string;
 
+            onClickContorlDot = true;
+        }
+
+        private void Button_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            onClickDrawShape = true;
+            mousePoint1 = GetMousePosition();
+            //PositionX1.Text = mousePoint1.X.ToString();
+            //PositionY1.Text = mousePoint1.Y.ToString();
+            MainCanvas.Children.Add(DrawShape(mousePoint1.X, mousePoint1.Y, mousePoint1.X, mousePoint1.Y));
+        }
 
         private void MainCanvas_MouseMove(object sender, MouseEventArgs e)
         {
             if(onClickContorlDot)
             {
-                mousePoint2 = GetMousePosition();
-                ShowShapeControlDot(mousePoint1.X, mousePoint1.Y, mousePoint2.X, mousePoint2.Y);
-                //switch (selectID)
-                //{
-                //    case "ID_1":
-                //    case "ID_2":
-                //    case "ID_3":
-                //    case "ID_4":
-                //    case "ID_5":
-                //    case "ID_6":
-                //    case "ID_7":
-                //    case "ID_8":
-                //}
+                switch (selectID)
+                {
+                    case "ID_1":
+                        controlDotMousePoint1 = GetMousePosition();
+                        break;
+                    case "ID_2":
+                        controlDotMousePoint1.Y = GetMousePosition().Y;
+                        break;
+                    case "ID_3":
+                        controlDotMousePoint1 = GetMousePosition();
+                        break;
+                    case "ID_4":
+                        controlDotMousePoint1.X = GetMousePosition().X;
+                        break;
+                    case "ID_5":
+                        controlDotMousePoint2.X = GetMousePosition().X;
+                        break;
+                    case "ID_6":
+                        controlDotMousePoint1 = GetMousePosition();
+                        break;
+                    case "ID_7":
+                        controlDotMousePoint2.Y = GetMousePosition().Y;
+                        break;
+                    case "ID_8":
+                        controlDotMousePoint2 = GetMousePosition();
+                        break;
+                }
+                ShowShapeControlDot(controlDotMousePoint1.X, controlDotMousePoint1.Y, controlDotMousePoint2.X, controlDotMousePoint2.Y);
             }
-            if (onClickDrawShape)
+            else if (onClickDrawShape)
             {
                 mousePoint2 = GetMousePosition();
 
                 switch (shape)
                 {
                     case 1:
+                        drawLine.X1 = mousePoint1.X;
+                        drawLine.Y1 = mousePoint1.Y;
                         drawLine.X2 = mousePoint2.X;
                         drawLine.Y2 = mousePoint2.Y;
                         break;
@@ -253,6 +260,60 @@ namespace DrawingBoard
                         break;
                 }
             }
+        }
+
+        private void Button_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            mousePoint2 = GetMousePosition();
+
+            if (onClickContorlDot == false)
+            {
+                controlDotMousePoint1 = new Point(mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X, mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
+                controlDotMousePoint2 = new Point(mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X, mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
+                ShowShapeControlDot(controlDotMousePoint1.X, controlDotMousePoint1.Y, controlDotMousePoint2.X, controlDotMousePoint2.Y);
+            }
+            else
+            {
+                switch (selectID)
+                {
+                    case "ID_1":
+                        controlDotMousePoint1 = new Point(controlDotMousePoint2.X < mousePoint2.X ? controlDotMousePoint2.X : mousePoint2.X, controlDotMousePoint2.Y < mousePoint2.Y ? controlDotMousePoint2.Y : mousePoint2.Y);
+                        controlDotMousePoint2 = new Point(controlDotMousePoint2.X > mousePoint2.X ? controlDotMousePoint2.X : mousePoint2.X, controlDotMousePoint2.Y > mousePoint2.Y ? controlDotMousePoint2.Y : mousePoint2.Y);
+                        break;
+                    case "ID_2":
+                        controlDotMousePoint1 = new Point(controlDotMousePoint1.X, controlDotMousePoint2.Y < mousePoint2.Y ? controlDotMousePoint2.Y : mousePoint2.Y);
+                        controlDotMousePoint2 = new Point(controlDotMousePoint2.X, controlDotMousePoint2.Y > mousePoint2.Y ? controlDotMousePoint2.Y : mousePoint2.Y);
+                        break;
+                    case "ID_3":
+                        controlDotMousePoint1 = new Point(mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X, mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
+                        controlDotMousePoint2 = new Point(mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X, mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
+                        break;
+                    case "ID_4":
+                        controlDotMousePoint1 = new Point(controlDotMousePoint2.X < mousePoint2.X ? controlDotMousePoint2.X : mousePoint2.X, controlDotMousePoint1.Y);
+                        controlDotMousePoint2 = new Point(controlDotMousePoint2.X > mousePoint2.X ? controlDotMousePoint2.X : mousePoint2.X, controlDotMousePoint2.Y);
+                        break;
+                    case "ID_5":
+                        controlDotMousePoint2 = new Point(controlDotMousePoint1.X > mousePoint2.X ? controlDotMousePoint1.X : mousePoint2.X, controlDotMousePoint2.Y);
+                        controlDotMousePoint1 = new Point(controlDotMousePoint1.X < mousePoint2.X ? controlDotMousePoint1.X : mousePoint2.X, controlDotMousePoint1.Y);
+                        break;
+                    case "ID_6":
+                        controlDotMousePoint1 = new Point(mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X, mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
+                        controlDotMousePoint2 = new Point(mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X, mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
+                        break;
+                    case "ID_7":
+                        controlDotMousePoint2 = new Point(controlDotMousePoint2.X, controlDotMousePoint1.Y > mousePoint2.Y ? controlDotMousePoint1.Y : mousePoint2.Y);
+                        controlDotMousePoint1 = new Point(controlDotMousePoint1.X, controlDotMousePoint1.Y < mousePoint2.Y ? controlDotMousePoint1.Y : mousePoint2.Y);
+                        break;
+                    case "ID_8":
+                        controlDotMousePoint2 = new Point(controlDotMousePoint1.X > mousePoint2.X ? controlDotMousePoint1.X : mousePoint2.X, controlDotMousePoint1.Y > mousePoint2.Y ? controlDotMousePoint1.Y : mousePoint2.Y);
+                        controlDotMousePoint1 = new Point(controlDotMousePoint1.X < mousePoint2.X ? controlDotMousePoint1.X : mousePoint2.X, controlDotMousePoint1.Y < mousePoint2.Y ? controlDotMousePoint1.Y : mousePoint2.Y);
+                        break;
+                }
+            }
+            onClickDrawShape = false;
+            onClickContorlDot = false;
+            //PositionX2.Text = mousePoint2.X.ToString();
+            //PositionY2.Text = mousePoint2.Y.ToString();
         }
 
         private void LineColorPicker_Changed(object sender, RoutedPropertyChangedEventArgs<Color?> e)
