@@ -35,6 +35,7 @@ namespace DrawingBoard
         bool onClickDrawShape = false;
         bool onClickContorlDot = false;
         bool onClickShape = false;
+        bool onSelectShape = false;
         int shape = 1;
         public MainWindow()
         {
@@ -161,9 +162,10 @@ namespace DrawingBoard
         private void Shape_MouseDown(object sender, MouseButtonEventArgs e)
         {
             onClickShape = true;
+            movePoint1 = GetMousePosition();
         }
 
-        void MoveShpae()
+        void MoveShape()
         {
             movePoint2 = GetMousePosition();
             switch (shape)
@@ -181,11 +183,20 @@ namespace DrawingBoard
                     MoveCircle(movePoint1.X, movePoint1.Y, movePoint2.X, movePoint2.Y);
                     break;
             }
+
+            controlDotMousePoint1.X += (movePoint2.X - movePoint1.X);
+            controlDotMousePoint1.Y += (movePoint2.Y - movePoint1.Y);
+            controlDotMousePoint2.X += (movePoint2.X - movePoint1.X);
+            controlDotMousePoint2.Y += (movePoint2.Y - movePoint1.Y);
+            ShowShapeControlDot(controlDotMousePoint1.X, controlDotMousePoint1.Y, controlDotMousePoint2.X, controlDotMousePoint2.Y);
+
+            movePoint1 = movePoint2;
         }
 
         private void MoveCircle(double x1, double y1, double x2, double y2)
         {
-
+            Canvas.SetLeft(drawCircle, Canvas.GetLeft(drawCircle) + (x2 - x1));
+            Canvas.SetTop(drawCircle, Canvas.GetTop(drawCircle) + (y2 - y1));
         }
 
         private void MoveTriangle(double x1, double y1, double x2, double y2)
@@ -301,10 +312,17 @@ namespace DrawingBoard
 
         private void Button_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            onClickDrawShape = true;
-            mousePoint1 = GetMousePosition();
-            HideShapeControlDot();
-            if (!onClickContorlDot) MainCanvas.Children.Add(DrawShape(mousePoint1.X, mousePoint1.Y, mousePoint1.X, mousePoint1.Y));
+            if (!onClickShape)
+            {
+                onClickDrawShape = true;
+                mousePoint1 = GetMousePosition();
+                HideShapeControlDot();
+                if (!onClickContorlDot) MainCanvas.Children.Add(DrawShape(mousePoint1.X, mousePoint1.Y, mousePoint1.X, mousePoint1.Y));
+            }
+            if (!onClickShape && !onClickContorlDot)
+            {
+                onSelectShape = false;
+            }
         }
 
         private void MainCanvas_MouseMove(object sender, MouseEventArgs e)
@@ -356,6 +374,10 @@ namespace DrawingBoard
                     }
                 }
             }
+            else if(onClickShape)
+            {
+                MoveShape();
+            }
             else if (onClickDrawShape)
             {
                 mousePoint2 = GetMousePosition();
@@ -394,7 +416,7 @@ namespace DrawingBoard
         {
             mousePoint2 = GetMousePosition();
 
-            if (onClickContorlDot == false)
+            if (onClickContorlDot == false && onClickShape == false)
             {
                 if (shape == 1)
                 {
@@ -410,8 +432,9 @@ namespace DrawingBoard
                 controlDotMousePoint1 = new Point(mousePoint1.X < mousePoint2.X ? mousePoint1.X : mousePoint2.X, mousePoint1.Y < mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
                 controlDotMousePoint2 = new Point(mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X, mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
                 ShowShapeControlDot(controlDotMousePoint1.X, controlDotMousePoint1.Y, controlDotMousePoint2.X, controlDotMousePoint2.Y);
+                onSelectShape = true;
             }
-            else
+            else if(onClickContorlDot)
             {
                 switch (selectID)
                 {
@@ -451,13 +474,34 @@ namespace DrawingBoard
             }
             onClickDrawShape = false;
             onClickContorlDot = false;
+            onClickShape = false;
             //PositionX2.Text = mousePoint2.X.ToString();
             //PositionY2.Text = mousePoint2.Y.ToString();
+        }
+
+        private Shape SelectShape()
+        {
+            switch(shape)
+            {
+                case 1:
+                    return drawLine;
+                case 2:
+                    return drawRectangle;
+                case 3:
+                    return drawTriangle;
+                case 4:
+                    return drawCircle;
+            }
+            return drawLine;
         }
 
         private void LineColorPicker_Changed(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
             lineColor = new SolidColorBrush(e.NewValue.Value);
+            if(onSelectShape)
+            {
+                SelectShape().Stroke = lineColor;
+            }
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -469,6 +513,10 @@ namespace DrawingBoard
         private void FillColorPicker_Changed(object sender, RoutedPropertyChangedEventArgs<Color?> e)
         {
             fillColor = new SolidColorBrush(e.NewValue.Value);
+            if (onSelectShape)
+            {
+                SelectShape().Fill = fillColor;
+            }
         }
 
         public Point GetMousePosition()
