@@ -24,6 +24,7 @@ namespace DrawingBoard
         Rectangle background = new Rectangle();
         Brush fillColor = Brushes.White, lineColor = Brushes.Black;
         double lineStroke = 1;
+        bool isErrorLineStroke = false;
         Line drawLine;
         int lineKinds;
         Rectangle drawRectangle;
@@ -44,6 +45,7 @@ namespace DrawingBoard
             background.Width = 1000 - 15;
             background.Height = 500 - 88;
             background.Fill = Brushes.White;
+            background.Cursor = Cursors.Cross;
             MainCanvas.Children.Add(background);
             SettingShapeControlDot();
         }
@@ -69,6 +71,7 @@ namespace DrawingBoard
                     break;
             }
             result.MouseDown += Shape_MouseDown;
+            result.Cursor = Cursors.Hand;
             SetSizeShape(x1, y1, x2, y2);
             return result;
         }
@@ -237,10 +240,18 @@ namespace DrawingBoard
                 ShapeControlDot[i].MouseDown += ShapeControlDot_MouseDown;
                 ShapeControlDot[i].MouseDown += ShapeControlDot_MouseDown;
                 ShapeControlDot[i].Name = ("ID_" + (i + 1).ToString());
-                ShapeControlDot[i].Cursor = Cursors.Hand;
                 Panel.SetZIndex(ShapeControlDot[i], 10);
                 MainCanvas.Children.Add(ShapeControlDot[i]);
             }
+            ShapeControlDot[0].Cursor = Cursors.SizeNWSE;
+            ShapeControlDot[1].Cursor = Cursors.SizeNS;
+            ShapeControlDot[2].Cursor = Cursors.SizeNESW;
+            ShapeControlDot[3].Cursor = Cursors.SizeWE;
+            ShapeControlDot[4].Cursor = Cursors.SizeWE;
+            ShapeControlDot[5].Cursor = Cursors.SizeNESW;
+            ShapeControlDot[6].Cursor = Cursors.SizeNS;
+            ShapeControlDot[7].Cursor = Cursors.SizeNWSE;
+
         }
 
         void HideShapeControlDot()
@@ -425,7 +436,7 @@ namespace DrawingBoard
         {
             mousePoint2 = GetMousePosition();
 
-            if (onClickContorlDot == false && onClickShape == false)
+            if (onClickContorlDot == false && onClickShape == false && onClickDrawShape == true)
             {
                 if (shape == 1)
                 {
@@ -509,17 +520,53 @@ namespace DrawingBoard
             if (LineStroke.Text.Equals("")) return;
             try
             {
+                if(isErrorLineStroke)
+                {
+                    LineStroke.Text = LineStroke.Text.Replace("숫", "");
+                    LineStroke.Text = LineStroke.Text.Replace("자", "");
+                    LineStroke.Text = LineStroke.Text.Replace("입", "");
+                    LineStroke.Text = LineStroke.Text.Replace("력", "");
+                    isErrorLineStroke = false;
+                    LineStroke.CaretIndex = 1;
+                }
                 lineStroke = double.Parse(LineStroke.Text);
             }
             catch
             {
-                LineStroke.Text = "숫자 입력";
+                LineStroke.Text = "숫자입력";
+                LineStroke.Foreground = Brushes.Gray;
+                isErrorLineStroke = true;
                 return;
             }
+            LineStroke.Foreground = Brushes.Black;
             if(onSelectShape)
             {
                 SelectShape().StrokeThickness = lineStroke;
             }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(Keyboard.IsKeyDown(Key.LeftCtrl) && Keyboard.IsKeyDown(Key.Z))
+            {
+                
+            }
+            if(Keyboard.IsKeyDown(Key.Delete))
+            {
+                if(onSelectShape)
+                {
+                    SelectShape().Visibility = Visibility.Collapsed;
+                    HideShapeControlDot();
+                    onClickContorlDot = false;
+                    onClickDrawShape = false;
+                    onClickShape = false;
+                }
+            }
+        }
+
+        private void Window_KeyUp(object sender, KeyEventArgs e)
+        {
+
         }
 
         private void LineColorPicker_Changed(object sender, RoutedPropertyChangedEventArgs<Color?> e)
