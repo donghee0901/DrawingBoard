@@ -23,6 +23,7 @@ namespace DrawingBoard
         Ellipse[] ShapeControlDot = new Ellipse[8];
         Rectangle background = new Rectangle();
         Brush fillColor = Brushes.White, lineColor = Brushes.Black;
+        double lineStroke = 1;
         Line drawLine;
         int lineKinds;
         Rectangle drawRectangle;
@@ -77,14 +78,14 @@ namespace DrawingBoard
             drawRectangle = new Rectangle();
             drawRectangle.Fill = fillColor;
             drawRectangle.Stroke = lineColor;
-            drawRectangle.StrokeThickness = 1;
+            drawRectangle.StrokeThickness = lineStroke;
             return drawRectangle;
         }
         public Line DrawLine(double x1, double y1, double x2, double y2)
         {
             drawLine = new Line();
             drawLine.Stroke = lineColor;
-            drawLine.StrokeThickness = 1;
+            drawLine.StrokeThickness = lineStroke;
             return drawLine;
         }
         public Polygon DrawTriangle(double x1, double y1, double x2, double y2)
@@ -94,7 +95,7 @@ namespace DrawingBoard
             drawTriangle.Points = TrianglePoint;
             drawTriangle.Fill = fillColor;
             drawTriangle.Stroke = lineColor;
-            drawTriangle.StrokeThickness = 1;
+            drawTriangle.StrokeThickness = lineStroke;
 
             return drawTriangle;
         }
@@ -103,7 +104,7 @@ namespace DrawingBoard
             drawCircle = new Ellipse();
             drawCircle.Fill = fillColor;
             drawCircle.Stroke = lineColor;
-            drawCircle.StrokeThickness = 1;
+            drawCircle.StrokeThickness = lineStroke;
             return drawCircle;
         }
 
@@ -201,17 +202,25 @@ namespace DrawingBoard
 
         private void MoveTriangle(double x1, double y1, double x2, double y2)
         {
-
+            Point[] SaveLocation = { new Point(TrianglePoint[0].X, TrianglePoint[0].Y), new Point(TrianglePoint[1].X, TrianglePoint[1].Y), new Point(TrianglePoint[2].X, TrianglePoint[2].Y) };
+            TrianglePoint.Clear();
+            for (int i = 0; i < 3; i++) {
+                TrianglePoint.Add(new Point(SaveLocation[i].X + (x2 - x1), SaveLocation[i].Y + (y2 - y1)));
+            }
         }
 
         private void MoveRectangle(double x1, double y1, double x2, double y2)
         {
-
+            Canvas.SetLeft(drawRectangle, Canvas.GetLeft(drawRectangle) + (x2 - x1));
+            Canvas.SetTop(drawRectangle, Canvas.GetTop(drawRectangle) + (y2 - y1));
         }
 
         private void MoveLine(double x1, double y1, double x2, double y2)
         {
-
+            drawLine.X1 += (x2 - x1);
+            drawLine.Y1 += (y2 - y1);
+            drawLine.X2 += (x2 - x1);
+            drawLine.Y2 += (y2 - y1);
         }
 
         void SettingShapeControlDot()
@@ -493,6 +502,24 @@ namespace DrawingBoard
                     return drawCircle;
             }
             return drawLine;
+        }
+
+        private void LineStroke_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (LineStroke.Text.Equals("")) return;
+            try
+            {
+                lineStroke = double.Parse(LineStroke.Text);
+            }
+            catch
+            {
+                LineStroke.Text = "숫자 입력";
+                return;
+            }
+            if(onSelectShape)
+            {
+                SelectShape().StrokeThickness = lineStroke;
+            }
         }
 
         private void LineColorPicker_Changed(object sender, RoutedPropertyChangedEventArgs<Color?> e)

@@ -31,7 +31,7 @@
                 <Grid Height="50" Width="67">
                     <Rectangle Fill="White" Stroke="Black"/>
                     <Label Content="선 굵기" FontSize="7" FontWeight="Bold" VerticalAlignment="Top" VerticalContentAlignment="Center" HorizontalAlignment="Center" HorizontalContentAlignment="Center"/>
-                    <TextBox Name="LineStroke" Text="1" Height="27" Width="57" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5 5 5 5" Background="LightGray" BorderBrush="Black" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
+                    <TextBox Name="LineStroke" TextChanged="LineStroke_TextChanged" Text="1" Height="27" Width="57" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5 5 5 5" Background="LightGray" BorderBrush="Black" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" />
                 </Grid>
             </StackPanel>
         </Grid>
