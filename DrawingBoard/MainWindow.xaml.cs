@@ -20,6 +20,7 @@ namespace DrawingBoard
     /// </summary>
     public partial class MainWindow : Window
     {
+        List<DrawStack.Data> ShapeStack = new List<DrawStack.Data>();
         Ellipse[] ShapeControlDot = new Ellipse[8];
         Rectangle background = new Rectangle();
         Brush fillColor = Brushes.White, lineColor = Brushes.Black;
@@ -453,6 +454,11 @@ namespace DrawingBoard
                 controlDotMousePoint2 = new Point(mousePoint1.X > mousePoint2.X ? mousePoint1.X : mousePoint2.X, mousePoint1.Y > mousePoint2.Y ? mousePoint1.Y : mousePoint2.Y);
                 ShowShapeControlDot(controlDotMousePoint1.X, controlDotMousePoint1.Y, controlDotMousePoint2.X, controlDotMousePoint2.Y);
                 onSelectShape = true;
+
+                DrawStack.Data stack = new DrawStack.Data();
+                stack.shape = SelectShape();
+                stack.type = "make";
+                ShapeStack.Add(stack);
             }
             else if(onClickContorlDot)
             {
