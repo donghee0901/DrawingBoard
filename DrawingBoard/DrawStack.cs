@@ -13,6 +13,8 @@ namespace DrawingBoard
         public class Data
         {
             public Shape shape { get; set; }
+            public Point location1 { get; set; }
+            public Point location2 { get; set; }
             public string type { get; set; }
         }
     }
