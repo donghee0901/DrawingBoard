@@ -506,8 +506,6 @@ namespace DrawingBoard
             onClickDrawShape = false;
             onClickContorlDot = false;
             onClickShape = false;
-            //PositionX2.Text = mousePoint2.X.ToString();
-            //PositionY2.Text = mousePoint2.Y.ToString();
         }
 
         private Shape SelectShape()
