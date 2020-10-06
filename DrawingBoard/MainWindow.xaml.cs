@@ -657,6 +657,10 @@ namespace DrawingBoard
                             MoveShape_ctrl_z(ShapeStack[ShapeStackCount].shape, ShapeStack[ShapeStackCount].location1, ShapeStack[ShapeStackCount].location2);
                             resizeShape = ShapeStack[ShapeStackCount].shape;
                             break;
+                        case "Delete":
+                            ShapeStack[ShapeStackCount].shape.Visibility = Visibility.Visible;
+                            ShowShapeControlDot(ShapeStack[ShapeStackCount].location1.X, ShapeStack[ShapeStackCount].location1.Y, ShapeStack[ShapeStackCount].location2.X, ShapeStack[ShapeStackCount].location2.Y);
+                            break;
                     }
                     ShapeStackCount--;
                 }
@@ -671,7 +675,7 @@ namespace DrawingBoard
                     onClickDrawShape = false;
                     onClickShape = false;
                 }
-                //InputStack("Delete");
+                InputStack("Delete", controlDotMousePoint1, controlDotMousePoint2);
             }
         }
 
