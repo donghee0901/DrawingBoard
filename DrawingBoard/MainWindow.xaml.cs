@@ -28,7 +28,8 @@ namespace DrawingBoard
     public partial class MainWindow : Window
     {
         List<DrawStack.Data> ShapeStack = new List<DrawStack.Data>();
-        Shape resizeShape;
+        Point resizeStartLocation1, resizeStartLocation2;
+        Shape ingShape;
         int ShapeStackCount = -1;
         int ShapeStackCountMax = -1;
         Ellipse[] ShapeControlDot = new Ellipse[8];
@@ -84,8 +85,8 @@ namespace DrawingBoard
             }
             result.MouseDown += Shape_MouseDown;
             result.Cursor = Cursors.Hand;
-            resizeShape = SelectShape();
-            SetSizeShape(resizeShape, x1, y1, x2, y2);
+            ingShape = SelectShape();
+            SetSizeShape(ingShape, x1, y1, x2, y2);
             return result;
         }
 
@@ -164,42 +165,42 @@ namespace DrawingBoard
 
         private void SetSizeRectangle(Rectangle shape, double x1, double y1, double x2, double y2)
         {
-            drawRectangle.Width = (x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2);
-            drawRectangle.Height = (y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2);
-            Canvas.SetLeft(drawRectangle, (x1 < x2 ? x1 : x2));
-            Canvas.SetTop(drawRectangle, (y1 < y2 ? y1 : y2));
+            shape.Width = (x1 > x2 ? x1 : x2) - (x1 < x2 ? x1 : x2);
+            shape.Height = (y1 > y2 ? y1 : y2) - (y1 < y2 ? y1 : y2);
+            Canvas.SetLeft(shape, (x1 < x2 ? x1 : x2));
+            Canvas.SetTop(shape, (y1 < y2 ? y1 : y2));
         }
 
         private void SetSizeLine(Line shape, double x1, double y1, double x2, double y2)
         {
-            drawLine.X1 = x1;
-            drawLine.Y1 = y1;
-            drawLine.X2 = x2;
-            drawLine.Y2 = y2;
+            shape.X1 = x1;
+            shape.Y1 = y1;
+            shape.X2 = x2;
+            shape.Y2 = y2;
         }
 
         private void Shape_MouseDown(object sender, MouseButtonEventArgs e)
-        {
+        { 
             onClickShape = true;
             movePoint1 = GetMousePosition();
         }
 
-        void MoveShape()
+        void MoveShape(Shape shape)
         {
             movePoint2 = GetMousePosition();
             switch (shapeKind)
             {
                 case 1:
-                    MoveLine(movePoint1.X, movePoint1.Y, movePoint2.X, movePoint2.Y);
+                    MoveLine((Line)shape, movePoint1.X, movePoint1.Y, movePoint2.X, movePoint2.Y);
                     break;
                 case 2:
-                    MoveRectangle(movePoint1.X, movePoint1.Y, movePoint2.X, movePoint2.Y);
+                    MoveRectangle((Rectangle)shape, movePoint1.X, movePoint1.Y, movePoint2.X, movePoint2.Y);
                     break;
                 case 3:
-                    MoveTriangle(movePoint1.X, movePoint1.Y, movePoint2.X, movePoint2.Y);
+                    MoveTriangle((Polygon)shape, movePoint1.X, movePoint1.Y, movePoint2.X, movePoint2.Y);
                     break;
                 case 4:
-                    MoveCircle(movePoint1.X, movePoint1.Y, movePoint2.X, movePoint2.Y);
+                    MoveCircle((Ellipse)shape, movePoint1.X, movePoint1.Y, movePoint2.X, movePoint2.Y);
                     break;
             }
 
@@ -212,33 +213,34 @@ namespace DrawingBoard
             movePoint1 = movePoint2;
         }
 
-        private void MoveCircle(double x1, double y1, double x2, double y2)
+        private void MoveCircle(Ellipse shape, double x1, double y1, double x2, double y2)
         {
-            Canvas.SetLeft(drawCircle, Canvas.GetLeft(drawCircle) + (x2 - x1));
-            Canvas.SetTop(drawCircle, Canvas.GetTop(drawCircle) + (y2 - y1));
+            Canvas.SetLeft(shape, Canvas.GetLeft(shape) + (x2 - x1));
+            Canvas.SetTop(shape, Canvas.GetTop(shape) + (y2 - y1));
         }
 
-        private void MoveTriangle(double x1, double y1, double x2, double y2)
+        private void MoveTriangle(Polygon shape, double x1, double y1, double x2, double y2)
         {
             Point[] SaveLocation = { new Point(TrianglePoint[0].X, TrianglePoint[0].Y), new Point(TrianglePoint[1].X, TrianglePoint[1].Y), new Point(TrianglePoint[2].X, TrianglePoint[2].Y) };
-            TrianglePoint.Clear();
+            TrianglePoint = new PointCollection();
             for (int i = 0; i < 3; i++) {
                 TrianglePoint.Add(new Point(SaveLocation[i].X + (x2 - x1), SaveLocation[i].Y + (y2 - y1)));
             }
+            shape.Points = TrianglePoint;
         }
 
-        private void MoveRectangle(double x1, double y1, double x2, double y2)
+        private void MoveRectangle(Rectangle shape, double x1, double y1, double x2, double y2)
         {
-            Canvas.SetLeft(drawRectangle, Canvas.GetLeft(drawRectangle) + (x2 - x1));
-            Canvas.SetTop(drawRectangle, Canvas.GetTop(drawRectangle) + (y2 - y1));
+            Canvas.SetLeft(shape, Canvas.GetLeft(shape) + (x2 - x1));
+            Canvas.SetTop(shape, Canvas.GetTop(shape) + (y2 - y1));
         }
 
-        private void MoveLine(double x1, double y1, double x2, double y2)
+        private void MoveLine(Line shape, double x1, double y1, double x2, double y2)
         {
-            drawLine.X1 += (x2 - x1);
-            drawLine.Y1 += (y2 - y1);
-            drawLine.X2 += (x2 - x1);
-            drawLine.Y2 += (y2 - y1);
+            shape.X1 += (x2 - x1);
+            shape.Y1 += (y2 - y1);
+            shape.X2 += (x2 - x1);
+            shape.Y2 += (y2 - y1);
         }
         void MoveShape_ctrl_z(Shape shape, Point location1, Point location2)
         {
@@ -410,29 +412,34 @@ namespace DrawingBoard
             }
             if(onClickShape)
             {
-                switch (shapeKind)
+                switch (ingShape.ToString().Split('.')[ingShape.ToString().Split('.').Length - 1])
                 {
-                    case 1:
-                        MoveStartPoint1 = new Point(drawLine.X1, drawLine.Y1);
-                        MoveStartPoint2 = new Point(drawLine.X2, drawLine.Y2);
+                    case "Line":
+                        MoveStartPoint1 = new Point(((Line)ingShape).X1, ((Line)ingShape).Y1);
+                        MoveStartPoint2 = new Point(((Line)ingShape).X2, ((Line)ingShape).Y2);
                         break;
-                    case 2:
-                        MoveStartPoint1 = new Point(Canvas.GetLeft(SelectShape()), Canvas.GetTop(SelectShape()));
-                        MoveStartPoint2 = new Point(MoveStartPoint1.X + SelectShape().Width, MoveStartPoint1.Y + SelectShape().Height);
+                    case "Rectangle":
+                        MoveStartPoint1 = new Point(Canvas.GetLeft(((Rectangle)ingShape)), Canvas.GetTop(((Rectangle)ingShape)));
+                        MoveStartPoint2 = new Point(MoveStartPoint1.X + ((Rectangle)ingShape).Width, MoveStartPoint1.Y + ((Rectangle)ingShape).Height);
                         break;
-                    case 3:
+                    case "Polygon":
                         MoveStartPoint1 = new Point(TrianglePoint[0].X, TrianglePoint[1].Y);
                         MoveStartPoint2 = new Point(TrianglePoint[2].X, TrianglePoint[2].Y);
                         break;
-                    case 4:
-                        MoveStartPoint1 = new Point(Canvas.GetLeft(SelectShape()), Canvas.GetTop(SelectShape()));
-                        MoveStartPoint2 = new Point(MoveStartPoint1.X + SelectShape().Width, MoveStartPoint1.Y + SelectShape().Height);
+                    case "Ellipse":
+                        MoveStartPoint1 = new Point(Canvas.GetLeft(((Ellipse)ingShape)), Canvas.GetTop(((Ellipse)ingShape)));
+                        MoveStartPoint2 = new Point(MoveStartPoint1.X + ((Ellipse)ingShape).Width, MoveStartPoint1.Y + ((Ellipse)ingShape).Height);
                         break;
                     default:
                         MoveStartPoint1 = new Point(0, 0);
                         MoveStartPoint2 = new Point(0, 0);
                         break;
                 }
+            }
+            if(onClickContorlDot)
+            {
+                resizeStartLocation1 = controlDotMousePoint1;
+                resizeStartLocation2 = controlDotMousePoint2;
             }
         }
 
@@ -470,24 +477,24 @@ namespace DrawingBoard
                 if (shapeKind != 1)
                 {
                     ShowShapeControlDot(controlDotMousePoint1.X, controlDotMousePoint1.Y, controlDotMousePoint2.X, controlDotMousePoint2.Y);
-                    SetSizeShape(resizeShape, controlDotMousePoint1.X, controlDotMousePoint1.Y, controlDotMousePoint2.X, controlDotMousePoint2.Y);
+                    SetSizeShape(ingShape, controlDotMousePoint1.X, controlDotMousePoint1.Y, controlDotMousePoint2.X, controlDotMousePoint2.Y);
                 }
                 else
                 {
                     if(lineKinds == 1){
                         ShowShapeControlDot(controlDotMousePoint1.X, controlDotMousePoint1.Y, controlDotMousePoint2.X, controlDotMousePoint2.Y);
-                        SetSizeShape(resizeShape, (controlDotMousePoint1.X < controlDotMousePoint2.X ? controlDotMousePoint1.X : controlDotMousePoint2.X), (controlDotMousePoint1.Y < controlDotMousePoint2.Y ? controlDotMousePoint1.Y : controlDotMousePoint2.Y), (controlDotMousePoint1.X > controlDotMousePoint2.X ? controlDotMousePoint1.X : controlDotMousePoint2.X), (controlDotMousePoint1.Y > controlDotMousePoint2.Y ? controlDotMousePoint1.Y : controlDotMousePoint2.Y));
+                        SetSizeShape(ingShape, (controlDotMousePoint1.X < controlDotMousePoint2.X ? controlDotMousePoint1.X : controlDotMousePoint2.X), (controlDotMousePoint1.Y < controlDotMousePoint2.Y ? controlDotMousePoint1.Y : controlDotMousePoint2.Y), (controlDotMousePoint1.X > controlDotMousePoint2.X ? controlDotMousePoint1.X : controlDotMousePoint2.X), (controlDotMousePoint1.Y > controlDotMousePoint2.Y ? controlDotMousePoint1.Y : controlDotMousePoint2.Y));
                     }
                     else
                     {
                         ShowShapeControlDot(controlDotMousePoint1.X, controlDotMousePoint1.Y, controlDotMousePoint2.X, controlDotMousePoint2.Y);
-                        SetSizeShape(resizeShape, (controlDotMousePoint1.X < controlDotMousePoint2.X ? controlDotMousePoint1.X : controlDotMousePoint2.X), (controlDotMousePoint1.Y > controlDotMousePoint2.Y ? controlDotMousePoint1.Y : controlDotMousePoint2.Y), (controlDotMousePoint1.X > controlDotMousePoint2.X ? controlDotMousePoint1.X : controlDotMousePoint2.X), (controlDotMousePoint1.Y < controlDotMousePoint2.Y ? controlDotMousePoint1.Y : controlDotMousePoint2.Y));
+                        SetSizeShape(ingShape, (controlDotMousePoint1.X < controlDotMousePoint2.X ? controlDotMousePoint1.X : controlDotMousePoint2.X), (controlDotMousePoint1.Y > controlDotMousePoint2.Y ? controlDotMousePoint1.Y : controlDotMousePoint2.Y), (controlDotMousePoint1.X > controlDotMousePoint2.X ? controlDotMousePoint1.X : controlDotMousePoint2.X), (controlDotMousePoint1.Y < controlDotMousePoint2.Y ? controlDotMousePoint1.Y : controlDotMousePoint2.Y));
                     }
                 }
             }
             else if(onClickShape)
             {
-                MoveShape();
+                MoveShape(ingShape);
             }
             else if (onClickDrawShape)
             {
@@ -545,10 +552,12 @@ namespace DrawingBoard
                 ShowShapeControlDot(controlDotMousePoint1.X, controlDotMousePoint1.Y, controlDotMousePoint2.X, controlDotMousePoint2.Y);
                 onSelectShape = true;
 
+                ingShape = SelectShape();
                 InputStack("Make", controlDotMousePoint1, controlDotMousePoint2);
             }
             else if(onClickContorlDot)
             {
+                InputStack("Resize", resizeStartLocation1, resizeStartLocation2);
                 switch (selectID)
                 {
                     case "ID_1":
@@ -584,7 +593,6 @@ namespace DrawingBoard
                         controlDotMousePoint1 = new Point(controlDotMousePoint1.X < mousePoint2.X ? controlDotMousePoint1.X : mousePoint2.X, controlDotMousePoint1.Y < mousePoint2.Y ? controlDotMousePoint1.Y : mousePoint2.Y);
                         break;
                 }
-                //InputStack("Resize");
             }
             else if(onClickShape)
             {
@@ -637,7 +645,7 @@ namespace DrawingBoard
             LineStroke.Foreground = Brushes.Black;
             if(onSelectShape)
             {
-                SelectShape().StrokeThickness = lineStroke;
+                ingShape.StrokeThickness = lineStroke;
             }
         }
 
@@ -655,10 +663,15 @@ namespace DrawingBoard
                             break;
                         case "Move":
                             MoveShape_ctrl_z(ShapeStack[ShapeStackCount].shape, ShapeStack[ShapeStackCount].location1, ShapeStack[ShapeStackCount].location2);
-                            resizeShape = ShapeStack[ShapeStackCount].shape;
+                            ingShape = ShapeStack[ShapeStackCount].shape;
                             break;
                         case "Delete":
                             ShapeStack[ShapeStackCount].shape.Visibility = Visibility.Visible;
+                            ShowShapeControlDot(ShapeStack[ShapeStackCount].location1.X, ShapeStack[ShapeStackCount].location1.Y, ShapeStack[ShapeStackCount].location2.X, ShapeStack[ShapeStackCount].location2.Y);
+                            ingShape = ShapeStack[ShapeStackCount].shape;
+                            break;
+                        case "Resize":
+                            SetSizeShape(ShapeStack[ShapeStackCount].shape, ShapeStack[ShapeStackCount].location1.X, ShapeStack[ShapeStackCount].location1.Y, ShapeStack[ShapeStackCount].location2.X, ShapeStack[ShapeStackCount].location2.Y);
                             ShowShapeControlDot(ShapeStack[ShapeStackCount].location1.X, ShapeStack[ShapeStackCount].location1.Y, ShapeStack[ShapeStackCount].location2.X, ShapeStack[ShapeStackCount].location2.Y);
                             break;
                     }
@@ -669,7 +682,7 @@ namespace DrawingBoard
             {
                 if(onSelectShape)
                 {
-                    SelectShape().Visibility = Visibility.Collapsed;
+                    ingShape.Visibility = Visibility.Collapsed;
                     HideShapeControlDot();
                     onClickContorlDot = false;
                     onClickDrawShape = false;
@@ -689,7 +702,7 @@ namespace DrawingBoard
             try
             {
                 DrawStack.Data stack = new DrawStack.Data();
-                stack.shape = SelectShape();
+                stack.shape = ingShape;
                 stack.type = type;
                 stack.location1 = location1;
                 stack.location2 = location2;
@@ -711,7 +724,7 @@ namespace DrawingBoard
             lineColor = new SolidColorBrush(e.NewValue.Value);
             if(onSelectShape)
             {
-                SelectShape().Stroke = lineColor;
+                ingShape.Stroke = lineColor;
             }
         }
 
@@ -726,7 +739,7 @@ namespace DrawingBoard
             fillColor = new SolidColorBrush(e.NewValue.Value);
             if (onSelectShape)
             {
-                SelectShape().Fill = fillColor;
+                ingShape.Fill = fillColor;
             }
         }
 
