@@ -259,12 +259,12 @@ namespace DrawingBoard
                     MoveCircle_ctrl_z((Ellipse)shape, location1, location2);
                     break;
             }
+            ShowShapeControlDot(location1.X, location1.Y, location2.X, location2.Y);
         }
         void MoveCircle_ctrl_z(Ellipse shape, Point location1, Point location2)
         {
             Canvas.SetLeft(shape, location1.X);
             Canvas.SetTop(shape, location1.Y);
-            ShowShapeControlDot(location1.X, location1.Y, location2.X, location2.Y);
         }
         void MoveTriangle_ctrl_z(Polygon shape, Point location1, Point location2)
         {
@@ -274,13 +274,11 @@ namespace DrawingBoard
             TrianglePoint_ctrl_z.Add(new Point((location1.X > location2.X ? location1.X : location2.X), (location1.Y > location2.Y ? location1.Y : location2.Y)));
             shape.Points = TrianglePoint_ctrl_z;
             TrianglePoint = TrianglePoint_ctrl_z;
-            ShowShapeControlDot(location1.X, location1.Y, location2.X, location2.Y);
         }
         void MoveRectangle_ctrl_z(Rectangle shape, Point location1, Point location2)
         {
             Canvas.SetLeft(shape, location1.X);
             Canvas.SetTop(shape, location1.Y);
-            ShowShapeControlDot(location1.X, location1.Y, location2.X, location2.Y);
         }
         void MoveLine_ctrl_z(Line shape, Point location1, Point location2)
         {
@@ -288,7 +286,6 @@ namespace DrawingBoard
             shape.Y1 = location1.Y;
             shape.X2 = location2.X;
             shape.Y2 = location2.Y;
-            ShowShapeControlDot(location1.X, location1.Y, location2.X, location2.Y);
         }
 
         void SettingShapeControlDot()
@@ -645,6 +642,7 @@ namespace DrawingBoard
             LineStroke.Foreground = Brushes.Black;
             if(onSelectShape)
             {
+                InputStack("LineStrokeChange", controlDotMousePoint1, controlDotMousePoint2);
                 ingShape.StrokeThickness = lineStroke;
             }
         }
@@ -674,6 +672,15 @@ namespace DrawingBoard
                             SetSizeShape(ShapeStack[ShapeStackCount].shape, ShapeStack[ShapeStackCount].location1.X, ShapeStack[ShapeStackCount].location1.Y, ShapeStack[ShapeStackCount].location2.X, ShapeStack[ShapeStackCount].location2.Y);
                             ShowShapeControlDot(ShapeStack[ShapeStackCount].location1.X, ShapeStack[ShapeStackCount].location1.Y, ShapeStack[ShapeStackCount].location2.X, ShapeStack[ShapeStackCount].location2.Y);
                             break;
+                        case "LineStrokeChange":
+                            ShapeStack[ShapeStackCount].shape.StrokeThickness = ShapeStack[ShapeStackCount].lineStroke;
+                            break;
+                        case "LineColorChange":
+                            ShapeStack[ShapeStackCount].shape.Stroke = ShapeStack[ShapeStackCount].lineColor;
+                            break;
+                        case "FillColorChange":
+                            ShapeStack[ShapeStackCount].shape.Fill = ShapeStack[ShapeStackCount].fillColor;
+                            break;
                     }
                     ShapeStackCount--;
                 }
@@ -692,11 +699,6 @@ namespace DrawingBoard
             }
         }
 
-        private void Window_KeyUp(object sender, KeyEventArgs e)
-        {
-
-        }
-
         private void InputStack(string type, Point location1, Point location2)
         {
             try
@@ -706,6 +708,9 @@ namespace DrawingBoard
                 stack.type = type;
                 stack.location1 = location1;
                 stack.location2 = location2;
+                stack.fillColor = ingShape.Fill;
+                stack.lineColor = ingShape.Stroke;
+                stack.lineStroke = ingShape.StrokeThickness;
                 for (int i = ShapeStackCount + 1; i <= ShapeStackCountMax; i++)
                 {
                     ShapeStack.RemoveAt(ShapeStackCount + 1);
@@ -724,6 +729,7 @@ namespace DrawingBoard
             lineColor = new SolidColorBrush(e.NewValue.Value);
             if(onSelectShape)
             {
+                InputStack("LineColorChange", controlDotMousePoint1, controlDotMousePoint2);
                 ingShape.Stroke = lineColor;
             }
         }
@@ -739,6 +745,7 @@ namespace DrawingBoard
             fillColor = new SolidColorBrush(e.NewValue.Value);
             if (onSelectShape)
             {
+                InputStack("FillColorChange", controlDotMousePoint1, controlDotMousePoint2);
                 ingShape.Fill = fillColor;
             }
         }

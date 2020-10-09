@@ -7,7 +7,7 @@
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="Drawing Board" Height="500" Width="1000" Background="Black"
-        SizeChanged="Window_SizeChanged" Icon="./image/DrawingBoradIcon.png" KeyDown="Window_KeyDown" KeyUp="Window_KeyUp">
+        SizeChanged="Window_SizeChanged" Icon="./image/DrawingBoradIcon.png" KeyDown="Window_KeyDown">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
