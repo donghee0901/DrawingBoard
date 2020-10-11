@@ -51,6 +51,7 @@ namespace DrawingBoard
         bool onClickContorlDot = false;
         bool onClickShape = false;
         bool onSelectShape = false;
+        bool isCtrlZ = false;
         int shapeKind = 1;
         public MainWindow()
         {
@@ -62,6 +63,13 @@ namespace DrawingBoard
             MainCanvas.Children.Add(background);
             SettingShapeControlDot();
         }
+
+        void DeleteFocus()
+        {
+            Keyboard.ClearFocus();
+            Keyboard.Focus(MainCanvas);
+        }
+
         public Shape DrawShape(double x1, double y1, double x2, double y2)
         {
             Shape result;
@@ -361,6 +369,7 @@ namespace DrawingBoard
         private void LineButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
             shapeKind = 1;
+            DeleteFocus();
         }
         private void RectangleButton_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -618,32 +627,30 @@ namespace DrawingBoard
 
         private void LineStroke_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (LineStroke.Text.Equals("")) return;
             try
             {
-                if(isErrorLineStroke)
+                if (LineStroke.Text.Equals("")) return;
+                try
                 {
-                    LineStroke.Text = LineStroke.Text.Replace("숫", "");
-                    LineStroke.Text = LineStroke.Text.Replace("자", "");
-                    LineStroke.Text = LineStroke.Text.Replace("입", "");
-                    LineStroke.Text = LineStroke.Text.Replace("력", "");
-                    isErrorLineStroke = false;
-                    LineStroke.CaretIndex = 1;
+                    lineStroke = double.Parse(LineStroke.Text);
                 }
-                lineStroke = double.Parse(LineStroke.Text);
+                catch
+                {
+                    MessageBox.Show("숫자만 입력가능합니다.");
+                    LineStroke.Text = "";
+                    return;
+                }
+                LineStroke.Foreground = Brushes.Black;
+                if (onSelectShape && (!isCtrlZ) && (!isErrorLineStroke))
+                {
+                    InputStack("LineStrokeChange", controlDotMousePoint1, controlDotMousePoint2);
+                    ingShape.StrokeThickness = lineStroke;
+                }
+                isCtrlZ = false;
             }
-            catch
+            catch(Exception ea)
             {
-                LineStroke.Text = "숫자입력";
-                LineStroke.Foreground = Brushes.Gray;
-                isErrorLineStroke = true;
-                return;
-            }
-            LineStroke.Foreground = Brushes.Black;
-            if(onSelectShape)
-            {
-                InputStack("LineStrokeChange", controlDotMousePoint1, controlDotMousePoint2);
-                ingShape.StrokeThickness = lineStroke;
+                MessageBox.Show(ea.ToString());
             }
         }
 
@@ -673,6 +680,7 @@ namespace DrawingBoard
                             ShowShapeControlDot(ShapeStack[ShapeStackCount].location1.X, ShapeStack[ShapeStackCount].location1.Y, ShapeStack[ShapeStackCount].location2.X, ShapeStack[ShapeStackCount].location2.Y);
                             break;
                         case "LineStrokeChange":
+                            isCtrlZ = true;
                             ShapeStack[ShapeStackCount].shape.StrokeThickness = ShapeStack[ShapeStackCount].lineStroke;
                             break;
                         case "LineColorChange":
